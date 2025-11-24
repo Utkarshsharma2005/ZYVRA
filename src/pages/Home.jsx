@@ -40,7 +40,7 @@ const Home = () => {
             {/* 1. Hero Section 1: Image Background */}
             <section
                 className="relative h-screen flex items-center justify-start p-8 md:p-16"
-                style={{ backgroundImage: `url(./public/zyvarimg.png)`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                style={{ backgroundImage: `url(./public/zyvra.png)`, backgroundSize: 'cover', backgroundPosition: 'center' }}
             >
                 {/* Dark overlay jaisa video mein dikh raha hai */}
                 <div className="absolute inset-0 bg-black opacity-40"></div>
