@@ -13,6 +13,7 @@ import LoginSignup from './pages/LoginSignup';
 // ... baaki imports
 import { CartProvider } from './context/CartContext'; // <--- CartProvider import kiya
 import { AuthProvider } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         {/* App ko CartProvider se wrap kiya */}
         <CartProvider>
           <div className="flex flex-col min-h-screen bg-black text-white">
+            <Toaster position="top-right" reverseOrder={false} />
             <Header />
             <main className="flex-grow pt-16">
               <Routes>

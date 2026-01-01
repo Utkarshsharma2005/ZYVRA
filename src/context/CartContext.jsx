@@ -1,6 +1,7 @@
 
 
 import React, { createContext, useState, useContext } from 'react';
+import toast from 'react-hot-toast';
 
 // 1. Context create karna
 const CartContext = createContext();
@@ -16,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   // --- Functions ---
-  
+
   // A. Item Cart mein Add karna
   const addToCart = (product, quantity) => {
     setCartItems(prevItems => {
@@ -32,23 +33,29 @@ export const CartProvider = ({ children }) => {
         );
       } else {
         // Agar naya item hai, toh add kar do
-        return [...prevItems, { 
-            id: product.id, 
-            name: product.name,
-            price: product.price,
-            imageUrl: product.imageUrl,
-            qty: quantity 
+        return [...prevItems, {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          qty: quantity
         }];
       }
     });
-    alert(`${quantity} x ${product.name} Added to Cart!`);
+
+    toast.success(`${quantity} x ${product.name} Added to Cart!`, {
+      style: {
+        background: '#333',
+        color: '#fff',
+      },
+    });
   };
 
   // B. Item Cart se Remove karna (Abhi zaroori nahi, par pehle se daal dete hain)
   const removeFromCart = (productId) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
   };
-  
+
   // Cart ka total price calculate karna
   const cartTotal = cartItems.reduce((total, item) => total + item.price * item.qty, 0);
 

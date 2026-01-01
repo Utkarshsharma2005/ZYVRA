@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MOCK_PRODUCTS_DATA } from '../data/products';
 import { useCart } from '../context/CartContext'; // <--- NEW IMPORT
+import toast from 'react-hot-toast';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -12,7 +13,7 @@ const ProductDetail = () => {
 
     // State for selected quantity
     const [qty, setQty] = useState(1);
-    
+
 
     function handleAddToCart() {
         if (product) {
@@ -23,7 +24,7 @@ const ProductDetail = () => {
     const handleBuyNow = () => {
         if (product) {
             addToCart(product, qty);
-            alert('Item added and redirecting to Checkout!');
+            toast.success('Redirecting to Checkout!');
             // navigate to checkout can be added here later
         }
     };
