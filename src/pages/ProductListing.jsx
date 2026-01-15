@@ -2,63 +2,23 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { MOCK_PRODUCTS_DATA } from '../data/products';
 import { useCart } from '../context/CartContext';
+import ProductCard from '../Components/ProductCard';
+import Loader from '../Components/Loader';
 
 const CATEGORIES = [...new Set(MOCK_PRODUCTS_DATA.map(p => p.category))];
 const METALS = [...new Set(MOCK_PRODUCTS_DATA.map(p => p.metal))];
 
-const ProductCard = ({ data }) => {
-    const { id, name, price, imageUrl } = data;
-    const { addToCart } = useCart();
-
-    const handleAddToCart = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        addToCart(data, 1);
-    };
-
-    return (
-        <Link
-            to={`/products/${id}`}
-            className="product-card bg-gray-900 shadow-lg text-white group cursor-pointer block hover:shadow-white transition duration-300"
-        >
-            <div className="relative overflow-hidden">
-                <img
-                    src={imageUrl}
-                    alt={name}
-                    className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-            </div>
-
-            <div className="p-4 border-t border-gray-700">
-                <h3 className="text-lg font-semibold truncate hover:text-yellow-500 transition">
-                    {name}
-                </h3>
-                <p className="text-lg font-bold mt-1 text-gray-300">
-                    Rs. {price}
-                </p>
-
-                <button
-                    className="mt-4 w-full py-2 border border-white text-white text-sm font-medium hover:bg-white hover:text-black transition focus:outline-none"
-                    onClick={handleAddToCart}
-                >
-                    ADD TO CART
-                </button>
-            </div>
-        </Link>
-    );
-};
-
 function ProductListing() {
     const [loading, setLoading] = useState(true);
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [priceRange, setPriceRange] = useState(5000);
+    const [priceRange, setPriceRange] = useState(10000);
     const [sortBy, setSortBy] = useState('default');
 
-    // Simulate loading
+    // Simulate loading with new aesthetic loader
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
-        }, 1000);
+        }, 1500); // Increased slightly to show off the animation
     }, []);
 
     const handleCategoryChange = (category) => {
@@ -95,26 +55,26 @@ function ProductListing() {
     }, [selectedCategories, priceRange, sortBy]);
 
     if (loading) {
-        return <div className=" text-4xl text-style-italic p-12 text-center text-yellow-500">PLEASE WAIT...LOADING...</div>;
+        return <Loader />;
     }
 
     return (
         <div className="bg-black container mx-auto p-4 md:p-12 min-h-screen">
-            <h1 className="text-4xl font-bold mb-8">SHOP COLLECTION</h1>
+            <h1 className="text-4xl font-bold mb-8 text-white uppercase tracking-wider">Shop Collection</h1>
 
             <div className="flex flex-col lg:flex-row">
                 {/* Sidebar Filters */}
                 <div className="w-full lg:w-1/4 pr-0 lg:pr-8 border-b lg:border-b-0 lg:border-r border-gray-800 mb-8 lg:mb-0">
-                    <h2 className="text-xl font-semibold mb-4 text-yellow-500">Filter By</h2>
-                    <div className="space-y-6">
+                    <h2 className="text-xl font-semibold mb-6 text-yellow-500 uppercase tracking-widest">Filter By</h2>
+                    <div className="space-y-8">
                         <div>
-                            <p className="font-medium mb-2">Category</p>
-                            <ul className="text-sm text-gray-400 space-y-2">
+                            <p className="font-bold text-white mb-3 uppercase text-sm tracking-wide">Category</p>
+                            <ul className="text-sm text-gray-400 space-y-3">
                                 {CATEGORIES.map(category => (
-                                    <li key={category} className="flex items-center">
+                                    <li key={category} className="flex items-center hover:text-white transition-colors">
                                         <input
                                             type="checkbox"
-                                            className="mr-2 accent-yellow-500"
+                                            className="mr-3 accent-yellow-500 w-4 h-4 cursor-pointer"
                                             checked={selectedCategories.includes(category)}
                                             onChange={() => handleCategoryChange(category)}
                                         />
@@ -125,7 +85,7 @@ function ProductListing() {
                         </div>
 
                         <div>
-                            <p className="font-medium mb-2">Max Price: Rs. {priceRange}</p>
+                            <p className="font-bold text-white mb-3 uppercase text-sm tracking-wide">Max Price: Rs. {priceRange}</p>
                             <input
                                 type="range"
                                 min="0"
@@ -133,11 +93,11 @@ function ProductListing() {
                                 step="100"
                                 value={priceRange}
                                 onChange={(e) => setPriceRange(Number(e.target.value))}
-                                className="w-full accent-yellow-500"
+                                className="w-full accent-yellow-500 cursor-pointer"
                             />
-                            <div className="flex justify-between text-xs text-gray-500 mt-1">
-                                <span>0</span>
-                                <span>10000</span>
+                            <div className="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+                                <span>Rs. 0</span>
+                                <span>Rs. 10000</span>
                             </div>
                         </div>
                     </div>
@@ -145,12 +105,12 @@ function ProductListing() {
 
                 {/* Product Grid */}
                 <div className="w-full lg:w-3/4 lg:pl-8">
-                    <div className="flex justify-between items-center mb-6">
-                        <p className="text-gray-400 text-sm">
-                            Showing {filteredProducts.length} products
+                    <div className="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+                        <p className="text-gray-400 text-sm font-mono uppercase">
+                            Showing <span className="text-white font-bold">{filteredProducts.length}</span> products
                         </p>
                         <select
-                            className="bg-gray-800 p-2 rounded text-sm border border-gray-700 focus:outline-none focus:border-yellow-500"
+                            className="bg-black text-white p-2 text-sm border border-gray-700 focus:outline-none focus:border-yellow-500 uppercase tracking-wide cursor-pointer"
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                         >
@@ -167,15 +127,15 @@ function ProductListing() {
                                 <ProductCard key={product.id} data={product} />
                             ))
                         ) : (
-                            <div className="col-span-3 text-center py-12">
-                                <p className="text-xl text-gray-400 mb-2">No products found.</p>
+                            <div className="col-span-3 text-center py-20 border border-dashed border-gray-800 rounded-lg">
+                                <p className="text-xl text-gray-500 mb-4 uppercase tracking-widest">No products found</p>
                                 <button
                                     onClick={() => {
                                         setSelectedCategories([]);
                                         setPriceRange(10000);
                                         setSortBy('default');
                                     }}
-                                    className="text-white hover:underline"
+                                    className="text-yellow-500 hover:text-yellow-400 font-bold uppercase tracking-wider underline underline-offset-4"
                                 >
                                     Clear all filters
                                 </button>

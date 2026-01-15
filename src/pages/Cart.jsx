@@ -1,16 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; // <-- Context hook
+import Swal from 'sweetalert2';
 
 const Cart = () => {
     // Context se zaroori data aur functions nikaale
     const { cartItems, cartTotal, removeFromCart } = useCart();
-    
+
     // Taxes aur Shipping calculation
     const TAX_RATE = 0.10; // 10% tax
     const subtotal = cartTotal / (1 + TAX_RATE);
     const taxAmount = cartTotal - subtotal;
     const shipping = cartTotal > 0 ? 0 : 0; // Free shipping for simplicity
+
+    // Check Handler
+    const handleCheckout = () => {
+        Swal.fire({
+            title: 'Order Placed!',
+            text: 'Your order has been successfully placed.',
+            icon: 'success',
+            confirmButtonText: 'Great!',
+            confirmButtonColor: '#eab308', // yellow-500
+            background: '#111827', // gray-900
+            color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Logic to clear cart or redirect could go here
+                // clearCart(); // If available in context
+            }
+        });
+    };
 
     return (
         <div className="container mx-auto p-4 md:p-12 min-h-screen">
@@ -30,19 +49,19 @@ const Cart = () => {
                             <div key={item.id} className="flex items-center bg-gray-900 p-4 rounded-lg shadow-md border border-gray-800">
                                 {/* Item Image */}
                                 <img src={item.imageUrl} alt={item.name} className="w-20 h-20 object-cover rounded mr-4" />
-                                
+
                                 <div className="flex-grow">
                                     <h3 className="text-lg font-semibold">{item.name}</h3>
                                     <p className="text-gray-400">Rs. {item.price.toFixed(2)}</p>
                                 </div>
-                                
+
                                 <div className="flex items-center space-x-4">
                                     {/* Quantity */}
                                     <span className="text-white">Qty: {item.qty}</span>
                                     <span className="text-yellow-500 font-bold">Rs. {(item.price * item.qty).toFixed(2)}</span>
-                                    
+
                                     {/* Remove Button */}
-                                    <button 
+                                    <button
                                         className="text-red-500 hover:text-red-400 p-2 border border-red-500 rounded text-sm"
                                         onClick={() => removeFromCart(item.id)} // <-- Context function connected
                                     >
@@ -56,7 +75,7 @@ const Cart = () => {
                     {/* Right Side: Cart Summary */}
                     <div className="lg:w-1/4 bg-gray-900 p-6 rounded-lg shadow-xl h-fit">
                         <h2 className="text-2xl font-bold mb-4 border-b border-gray-700 pb-3">Order Summary</h2>
-                        
+
                         <div className="flex justify-between mb-2">
                             <span>Subtotal:</span>
                             <span>Rs. {subtotal.toFixed(2)}</span>
@@ -65,7 +84,7 @@ const Cart = () => {
                             <span>Tax:</span>
                             <span>Rs. {taxAmount.toFixed(2)}</span>
                         </div>
-                         <div className="flex justify-between mb-4">
+                        <div className="flex justify-between mb-4">
                             <span>Shipping:</span>
                             <span>{shipping === 0 ? 'Free' : `Rs. ${shipping.toFixed(2)}`}</span>
                         </div>
@@ -74,8 +93,11 @@ const Cart = () => {
                             <span>Order Total:</span>
                             <span>Rs. {cartTotal.toFixed(2)}</span>
                         </div>
-                        
-                        <button className="mt-6 w-full py-3 bg-yellow-500 text-black font-semibold rounded hover:bg-pink-600 transition">
+
+                        <button
+                            onClick={handleCheckout}
+                            className="mt-6 w-full py-3 bg-yellow-500 text-black font-semibold rounded hover:bg-pink-600 transition"
+                        >
                             PROCEED TO CHECKOUT
                         </button>
                     </div>

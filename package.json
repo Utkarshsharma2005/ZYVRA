@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "firebase": "^12.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^6.30.2",
+    "sweetalert2": "^11.26.17",
     "vanilla-marquee": "^1.1.2"
   },
   "devDependencies": {
