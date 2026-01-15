@@ -27,7 +27,7 @@ export const MOCK_PRODUCTS_DATA = [
         price: 2499.00,
         category: "Bracelets",
         metal: "Gold",
-        imageUrl: "./public/silver-aesthetic-wallpaper-with-chain.jpg",
+        imageUrl: "/silver-aesthetic-wallpaper-with-chain.jpg",
         description: "Heavy and bold chunky chain bracelet.",
         details: ["Chunky", "Statement", "Gold Plated"]
     },
